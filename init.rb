@@ -25,7 +25,7 @@ module Redmine
           menu_items_for(menu, project) do |node|
             if User.current.partial_admin?
               access = User.current.access
-              links << render_menu_node(node, project) if access.include? node.name.to_s
+              links << render_menu_node(node, project) if access.include?(node.url.is_a?(Hash) ? node.url[:controller] : node.url)
             else
               links << render_menu_node(node, project)
             end

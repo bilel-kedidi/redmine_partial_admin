@@ -2,15 +2,20 @@
 <hr>
 <div id="partial_admin_access">
   <% if User.current.partial_admin? || User.current.admin? %>
-    <% user = User.find params[:id] %>
-    <% user_access = user.access.keys %>
+    <% user = User.find_by_id( params[:id] )  %>
+    <% user ||= User.new %>
+    <% user_access = user.access&.keys || [] %>
     <% user_partial_admin = user.partial_admin %>
     <% tab_access = [] %>
     <% tab_caption = [] %>
     <% menu_items_for(:admin_menu).each do |item| %>
-      <% tab_access <<  item.name.to_s %>
-      <% tab_caption << item.caption.to_s %>
+      <% if item.url.is_a? Hash %>
+        <% tab_access <<  ( item.url[:controller].to_s)%>
+        <% tab_caption << ( item.caption.to_s) %>
+      <% end %>
     <% end %>
+
+
   <% end %>
 </div>
 
